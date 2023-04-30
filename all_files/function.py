@@ -95,38 +95,22 @@ del_user(9)
 
 
 '''Функция, позволяющая найти клиента по его данным: имени, фамилии, email или телефону.'''
-def select_user(user_data):
-    with conn.cursor() as cursor:
-        (f"SELECT name, surname, email FROM username where name ='{name}', surname = '{surname}', email ='{email}'")
-        ("SELECT (name, surname, email) FROM username where name,surname,email = (%s,%s,%s)", (user_data[0], user_data[1], user_data[2]))
+def select_user(name=None,surname=None, email=None, phone=None):
+    if name:
+        cursor = conn.cursor()
+        cursor.execute(f"SELECT * FROM username where name = '{name}' ")
+        print(cursor.fetchall())
+    if surname:
+        cursor = conn.cursor()
+        cursor.execute(f"SELECT * FROM username where surname = '{surname}' ")
+        print(cursor.fetchall())
+    if email:
+        cursor = conn.cursor()
+        cursor.execute(f"SELECT * FROM username where email = '{email}' ")
+        print(cursor.fetchall())
+    if phone:
+        cursor = conn.cursor()
+        cursor.execute(f"SELECT * FROM username LEFT JOIN username_phone on username_phone.user_id = username.id WHERE phone_id IN(SELECT id FROM phone where phone = '{phone}')")
 
-        ('INSERT INTO username( name, surname, email) VALUES (%s,%s,%s)', (user_data[0], user_data[1], user_data[2]))
-        conn.commit()
-# (f"select id from phone where phone = '{phone}'")
-
-
-
-
-
-
-
-#     "sql - запросы"
-#
-# request = input('Введите номер операции\n'
-#                '1.Функция, создающая структуру БД: Введите create_tables(таблицы)\n'
-#                '2.Функция, позволяющая добавить нового клиента\n')
-#
-#
-# conn = psycopg2.connect(database=DATABASENAME, user=USER, password=PASSWORD, host=HOST, port=PORT)
-#
-# # Pattern matching -> Python 3.10
-# match request.split():
-#     # Unpacking
-#     case "create_tables", :
-#         create_tables(conn)
-#     case "create_user", *data:
-#         create_user(data,conn)
-#     case _:
-#         print("Ошибка ввода")
-#
-# # "create_user Pavel Ivanov aa@gmail.com +88005553535"
+        print(cursor.fetchall())
+print(select_user(phone='8800555'))
