@@ -27,6 +27,7 @@ def create_user(user_data: list, conn):
         print("Данные добавлены")
 
 create_user(['Варений','Mеладзе','@','123321'],conn)
+create_user(['Jack','London','@.GB','1234321'],conn)
 
 
 # функция, позволяющая добавить телефон для существующего клиента
@@ -39,7 +40,7 @@ def insert_phone(conn,phone,user_id):
         '''нашли id телефона из phone'''
         conn.commit()
         print("Данные добавлены")
-insert_phone(conn,'799090909','7')
+insert_phone(conn,'799090909','1')
 
 
 # функция, которая позволяет изменить данные о клиенте
@@ -88,7 +89,7 @@ def del_user(user_id):
         conn.commit()
     print("Данные удалены")
 
-del_user(9)
+del_user(1)
 
 
 # Функция, позволяющая найти клиента по его данным: имени, фамилии, email или телефону.
@@ -110,4 +111,4 @@ def select_user(name=None,surname=None, email=None, phone=None):
         cursor.execute(f"SELECT * FROM username LEFT JOIN username_phone on username_phone.user_id = username.id WHERE phone_id IN(SELECT id FROM phone where phone = '{phone}')")
 
         print(cursor.fetchall())
-print(select_user(phone='8800555'))
+print(select_user(phone='1234321'))
