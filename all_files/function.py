@@ -42,10 +42,7 @@ def insert_phone(conn,phone,user_id):
 insert_phone(conn,'799090909','7')
 
 
-
-
 # функция, которая позволяет изменить данные о клиенте
-
 def change_user_name(conn, name, surname, mail, phone, user_id, phone_id):
     with conn.cursor() as cursor:
         cursor.execute("UPDATE username SET name =%s, surname = %s, email = %s where id = %s;",
@@ -58,7 +55,7 @@ def change_user_name(conn, name, surname, mail, phone, user_id, phone_id):
 change_user_name(conn,'Alfred','Waune','@blist','8800555','10','17')
 
 
-'''Функция, позволяющая удалить телефон для существующего клиента.'''
+# Функция, позволяющая удалить телефон для существующего клиента.
 def del_user_phone(conn,phone_id):
     with conn.cursor() as cursor:
         cursor.execute(f"DELETE FROM username_phone where phone_id = '{phone_id}' ")
@@ -66,19 +63,20 @@ def del_user_phone(conn,phone_id):
         conn.commit()
 del_user_phone(conn, 14)
 
-'''Функция, позволяющая удалить существующего клиента.'''
+
+# Функция, позволяющая удалить существующего клиента
 def del_user(user_id):
     with conn.cursor() as cursor:
-        # cursor.execute(f"DELETE FROM username_phone where user_id = '{user_id}' ")
+
         '''удалили связь между таблицами'''
         cursor.execute("ALTER TABLE username_phone  DROP CONSTRAINT username_phone_user_id_fkey")
         cursor.execute("ALTER TABLE username_phone  DROP CONSTRAINT username_phone_phone_id_fkey")
-
 
         '''выполнили каскадное удаление из user_phone до phone'''
         cursor.execute(f"DELETE FROM phone WHERE id IN (SELECT phone_id FROM username_phone where user_id = '{user_id}') ")
         cursor.execute(f"DELETE FROM username where id = '{user_id}' ")
         cursor.execute(f"DELETE FROM username_phone where user_id = '{user_id}' ")
+
         '''восстановили связь между таблицами'''
         cursor.execute(
             "ALTER TABLE username_phone ADD CONSTRAINT username_phone_user_id_fkey FOREIGN KEY (user_id) "
@@ -93,8 +91,7 @@ def del_user(user_id):
 del_user(9)
 
 
-
-'''Функция, позволяющая найти клиента по его данным: имени, фамилии, email или телефону.'''
+# Функция, позволяющая найти клиента по его данным: имени, фамилии, email или телефону.
 def select_user(name=None,surname=None, email=None, phone=None):
     if name:
         cursor = conn.cursor()
