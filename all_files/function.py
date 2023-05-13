@@ -21,11 +21,9 @@ def create_tables(conn):
 create_tables(conn)
 
 
-#
 # Функция, позволяющая добавить нового клиента.
 def create_user(user_data: list, conn):
     with conn.cursor() as cursor:
-        # Попытка выполнение транзации
 
         cursor.execute('INSERT INTO username( name, surname, email) VALUES (%s,%s,%s)',
                        (user_data[0], user_data[1], user_data[2]))
@@ -39,7 +37,7 @@ create_user(['Jack', 'London', '@.GB'], conn)
 
 
 # функция, позволяющая добавить телефон для существующего клиента
-def insert_phone(conn, phone, user_id):
+def insert_phone(phone, user_id):
     with conn.cursor() as cursor:
         cursor.execute('INSERT INTO phone(phone,user_id) VALUES(%s,%s)', (phone, user_id))
 
@@ -47,12 +45,11 @@ def insert_phone(conn, phone, user_id):
         print("Данные добавлены")
 
 
-insert_phone(conn, '89036888888', 3)
-
+insert_phone('890366666666', 2)
 
 
 # функция, которая позволяет изменить данные о клиенте
-def change_user_name(conn, user_id, phone_id, name=None, surname=None, mail=None, phone=None):
+def change_user_name (user_id, phone_id, name=None, surname=None, mail=None, phone=None):
     with conn.cursor() as cursor:
         if name:
             cursor.execute("UPDATE username SET name =%s where id =%s;", (name, user_id))
@@ -70,20 +67,16 @@ def change_user_name(conn, user_id, phone_id, name=None, surname=None, mail=None
         print("Данные добавлены")
 
 
-change_user_name(conn, '1', '4', name='Pavel')
-
-
+change_user_name('2', '2', name='Pavel')
 
 # Функция, позволяющая удалить телефон для существующего клиента.
-def del_user_phone(conn, id_user):
+def del_user_phone(id_user):
     with conn.cursor() as cursor:
         cursor.execute("DELETE FROM phone where user_id = %s", (id_user))
         conn.commit()
 
 
-del_user_phone(conn, '1')
-
-
+del_user_phone ('2')
 
 # Функция, позволяющая удалить существующего клиента
 def del_user(user_id):
@@ -95,8 +88,6 @@ def del_user(user_id):
 
 
 del_user('1')
-
-
 
 # Функция, позволяющая найти клиента по его данным: имени, фамилии, email или телефону.
 def select_user(Name=None, Surname=None, Email=None, Phone=None):
@@ -119,4 +110,4 @@ def select_user(Name=None, Surname=None, Email=None, Phone=None):
         print(cursor.fetchall())
 
 
-select_user(Phone="89036888888")
+select_user(Phone="890366666666")
